@@ -1,0 +1,160 @@
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <style>
+        body {
+        background-color: white; 
+        font-family: helvetica;
+        color: black;
+        font-size:14px; 
+        text-align: center;
+        } 
+
+        #login-box {
+        border: none;
+        border-radius: 4px;
+        background-color: #ededed;
+        padding: 10px;
+        width: 300px;
+        height: 45px;    
+        }
+
+        input[type="text"],
+        input[type="password"]
+        {
+        display: block;
+        box-sizing: border-box;
+        margin-bottom: 20px;
+        padding: 4px;
+        width: 250px;
+        height: 32px;
+        border: none;
+        outline: none;
+        border-bottom: 1px solid #aaa;
+        font-family: Helvetica;
+        font-weight: 400;
+        font-size: 15px;
+        transition: 0.2s ease;
+        }
+
+        .login-button
+        {
+        vertical-align: middle;
+        width: 300px;
+        height: 45px; 
+        background:#5da5db;
+        /* border: 2px solid #5da5db; */
+        border: none;
+        border-radius: 4px;
+        color: white;
+        font-family: Helvetica;
+        font-weight: bold;
+        font-size: 14px;
+        text-transform: uppercase;
+        transition: 0.2s ease;
+        cursor: pointer;
+        }
+
+        input[type="submit"]:hover,
+        input[type="submit"]:focus
+        {
+        background: #5da5db;
+        transition: 0.2x;
+        width: 310px;
+        height: 50px;
+        }
+
+        .header{
+        padding-top: 50px;
+        text-align: center;
+        font-style: Helvetica;
+        color: black;
+        font-size: 40px;
+        }
+    </style>
+
+
+    <title>Login Page</title>
+
+
+  </head>
+  <body>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+    {% load static %}
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <br>
+        <div class="modal-body" align = "center" style = 'border-radius: 50px'>
+            <form action="/signup/" method="POST">
+                {% csrf_token %}
+                <p style="font-size:20px;font-family:Helvetica" >
+                    <input type="text" input name="username" id="login-box" placeholder="username" >
+                    <input type="text" input name="email" id="login-box" placeholder="email">
+                    <input type="password" name="password" id="login-box" placeholder="password">
+                    <input type="submit" class="login-button" value="sign up" >
+                    <br style="line-height: 100px" />
+            </form>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+    
+    
+        <div class="img-container" style="padding-top: 150px;">
+            <img src="{% static '/logo.png' %}" alt="logo" width = "250px">
+        </div>
+    
+        <br>
+        <div class="container" align="center">
+            <br>
+     
+    
+            <form action="/login/" method="POST">
+                {% csrf_token %}
+                <p style="font-size:20px;font-family:Helvetica">
+                    <input type="text" input name="username" id="login-box" placeholder="username">
+                    <input type="password" name="password" id="login-box" placeholder="password">
+                    <input type="submit" class="login-button" value="login" >
+                    <br style="line-height: 100px" />
+            </form>
+    
+            <br>
+            <br>
+       
+                <!-- Button trigger modal -->
+            <button type="button" class="login-button" style = "border-radius: 20px; width: 150px; background-color:  #ededed; color: black"data-toggle="modal" data-target="#exampleModal">
+                Sign Up
+            </button>
+
+
+
+
+            
+        </div>    
+
+
+</body>
+
+
+</html>
