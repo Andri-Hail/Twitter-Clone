@@ -1,1 +1,88 @@
-HOME
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Bootleg Twitter</title>
+  </head>
+  <body>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
+
+
+    {% load static %}
+
+<p>
+ <a href="/profilepage/">
+    <img src="{% static '/profilepic.png' %}" alt="logo" width = "60px" style="float:right; margin-right:15px">
+ </a>
+</p>
+
+
+    
+    <form method="POST" action="/home/">
+        {% csrf_token %}
+        <input name="body" placeholder="What's on your mind?"/>
+        <input type="submit" value="Post Tweet"/>
+
+    </form>
+
+
+
+    {% for tweet in tweets %}
+        <div style = "border: 2px solid black; margin: 6px; width:50%">
+            <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</p>
+            <p>{{tweet.body}}</p>
+            {% if username == tweet.author%}
+                <a href="delete?id={{tweet.id}}">Delete</a>
+            {%endif%} 
+
+            <form action = "{% url 'like_post' tweet.pk %}" method="POST">
+                {% csrf_token %}
+                <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
+            </form>
+
+
+
+        </div>
+
+    {% endfor %}
+
+    <!-- ONLY SHOW LIKED TWEETS: -->
+    <!-- {% for tweet in liked_tweets %}
+    <div style = "border: 2px solid black; margin: 6px; width:50%">
+        <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</0>
+        <p>{{tweet.body}}</p>
+        {% if username == tweet.author%}
+            <a href="delete?id={{tweet.id}}">Delete</a>
+        {%endif%} 
+
+        <form action = "{% url 'like_post' tweet.pk %}" method="POST">
+            {% csrf_token %}
+            <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
+        </form> -->
+
+<!-- 
+
+    </div>
+{% endfor %} -->
+
+
+
+
+
+</body>
+</html>

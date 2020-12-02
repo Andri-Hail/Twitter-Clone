@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 def accounts(request):
 	return render(request, "accounts.html", {})
 
+def home(request):
+    tweets = Tweets.objects.all()
+    return render(request, 'homepage.html', {'tweets' : notes})
 
 def login_view(request):
     if request.method == "POST":
