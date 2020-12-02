@@ -18,10 +18,9 @@ def like_view(request, pk):
     if tweet.likes.filter(id=request.user.id).exists():
         tweet.likes.remove(request.user)
     else:
-        tweet.likes.add(request.user)
-    return redirect('/home/')
+        tweet.likes.add(request.user)  
+    return redirect(request.META['HTTP_REFERER'])
 
-    # return HttpResponseRedirect(reverse('tweet', args=[str(pk)]))
 def profile(request):
     if not request.user.is_authenticated:
         return redirect('/accounts/')
@@ -29,17 +28,24 @@ def profile(request):
    
     username = request.user
     tweets = Tweet.objects.all()
+
     my_tweets = set()
     liked_tweets = set()
+    tweet_count = 0
     for tweet in tweets:
         if tweet.likes.filter(id=request.user.id).exists():
             liked_tweets.add(tweet)
 
     for tweet in tweets:
         if tweet.author == username:
+            tweet_count += 1
             my_tweets.add(tweet)
+    if tweet_count == 1:
+        append = 'tweet'
+    else:
+        append = 'tweets'
 
-    return render(request, 'profilepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'my_tweets' : my_tweets, 'username' : username})
+    return render(request, 'profilepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'my_tweets' : my_tweets, 'username' : username, 'tweet_count' : tweet_count, 'append' : append })
 
 
 def home(request):
@@ -70,4 +76,4 @@ def delete_view(request):
     tweet = Tweet.objects.get(id=request.GET['id'])
     if tweet.author == request.user:
         tweet.delete()
-    return redirect('/home/')
+    return redirect(request.META['HTTP_REFERER'])

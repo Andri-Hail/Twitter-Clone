@@ -62,23 +62,7 @@
     {% endfor %}
 
     <!-- ONLY SHOW LIKED TWEETS: -->
-    <!-- {% for tweet in liked_tweets %}
-    <div style = "border: 2px solid black; margin: 6px; width:50%">
-        <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</0>
-        <p>{{tweet.body}}</p>
-        {% if username == tweet.author%}
-            <a href="delete?id={{tweet.id}}">Delete</a>
-        {%endif%} 
-
-        <form action = "{% url 'like_post' tweet.pk %}" method="POST">
-            {% csrf_token %}
-            <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
-        </form> -->
-
-<!-- 
-
-    </div>
-{% endfor %} -->
+    
 
 
 

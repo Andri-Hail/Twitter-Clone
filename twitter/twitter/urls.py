@@ -27,6 +27,8 @@ urlpatterns = [
     path('logout/', logout_view, name='logout_view'),
     path('signup/', signup_view, name='signup_view'),
     path('home/delete', delete_view, name='delete_view'),
+    path('profilepage/delete', delete_view, name='delete_view'),
+
     path('like/<int:pk>', like_view, name='like_post'),
     path('profilepage/', profile, name='profile')
     # path('', login, name='login'),
