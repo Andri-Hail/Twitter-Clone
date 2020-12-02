@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from home.models import Tweet
+from home.models import Tweet, Hashtag
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 import re
 # Create your views here.
 
@@ -53,8 +54,18 @@ def home(request):
         tweet = Tweet.objects.create (
             body = text,
             author = request.user
-
         )
+        
+        #Parse out hashtags and add them to Model, related to Tweet
+        hashtags = re.findall(r"#(\w+)", text)
+        for hashtag in hashtags:
+            try:
+                hashtag_obj = Hashtag.objects.get(word=hashtag)
+            except Hashtag.DoesNotExist as exc:
+                hashtag_obj = Hashtag.objects.create(word=hashtag)
+            hashtag_obj.tweets.add(tweet)
+
+
     username = request.user
     tweets = Tweet.objects.all()
     liked_tweets = set()
@@ -62,9 +73,19 @@ def home(request):
         if tweet.likes.filter(id=request.user.id).exists():
             liked_tweets.add(tweet)
 
+    hashtags = Hashtag.objects.all()
 
-    return render(request, 'homepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'username' : username})
+    return render(request, 'homepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'username' : username, 'hashtags' : hashtags})
 
+
+# Work in progress
+def hashtag_view(request):
+        
+    tag = request.GET['tag']
+    tag_obj = Hashtag.objects.get(word=tag)
+    tweets = tag_obj.tweets.all()
+
+    return render(request, 'hashtagpage.html', {'tag' : tag, 'tweets' : tweets})
 
 def delete_view(request):
     tweet = Tweet.objects.get(id=request.GET['id'])

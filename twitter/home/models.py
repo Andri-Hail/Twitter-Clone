@@ -9,8 +9,19 @@ class Tweet(models.Model):
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True)
     date = models.DateTimeField(auto_now=True)
     likes = models.ManyToManyField(User, related_name='post')
-    # hashtags = models.ManyToManyField()
+    # hashtags = models.ManyToManyField(Hashtag, related_name='post') # Moved this relation from Tweet to Hashtag
 
 
     def total_likes(self):
         return self.likes.count()
+
+    def __str__(self):
+        return self.title
+
+class Hashtag(models.Model):
+    
+    word = models.CharField(max_length=200)
+    tweets = models.ManyToManyField(Tweet, related_name='tag')
+
+    def __str__(self):
+        return "#" + self.word
