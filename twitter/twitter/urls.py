@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from home.views import home, delete_view, like_view, profile, editprofile
+from home.views import home, delete_view, like_view, profile, editprofile, hashtag_view
 from loginpage.views import accounts, login_view, signup_view, logout_view
 from django.conf import settings
 from django.conf.urls.static import static
@@ -28,8 +28,8 @@ urlpatterns = [
     path('logout/', logout_view, name='logout_view'),
     path('signup/', signup_view, name='signup_view'),
     path('home/delete', delete_view, name='delete_view'),
+    path('home/hashtag', hashtag_view, name='hashtag_view'),
     path('profilepage/delete', delete_view, name='delete_view'),
-
     path('like/<int:pk>', like_view, name='like_post'),
     path('profilepage/', profile, name='profile'),
     path('editprofile/', editprofile, name='editprofile')

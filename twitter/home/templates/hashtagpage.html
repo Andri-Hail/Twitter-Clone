@@ -1,0 +1,13 @@
+
+<h1>Tweets including #{{tag}}</h1>
+
+{% for tweet in tweets %}
+        <div style = "border: 2px solid black; margin: 6px; width:50%">
+            <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</p>
+            <p>{{tweet.body}}</p>
+            {% if username == tweet.author%}
+                <a href="delete?id={{tweet.id}}">Delete</a>
+            {%endif%}
+        </div>
+
+    {% endfor %}

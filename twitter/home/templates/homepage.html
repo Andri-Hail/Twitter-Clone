@@ -93,6 +93,14 @@
 
     {% endfor %}
 
+    <h1>Hashtags</h1>
+    {% for hashtag in hashtags %}
+        <div style = "border: 2px solid black; margin: 6px; width:50%">
+            <a href="hashtag?tag={{hashtag.word}}">{{hashtag}}</a>
+        </div>
+
+    {% endfor %}
+
     <!-- ONLY SHOW LIKED TWEETS: -->
     
 
