@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from home.models import Tweet
+from home.models import Tweet, Profile
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse
@@ -20,6 +20,12 @@ def like_view(request, pk):
     else:
         tweet.likes.add(request.user)  
     return redirect(request.META['HTTP_REFERER'])
+
+
+def editprofile(request):
+    return render(request, "editprofile.html", {})
+
+
 
 def profile(request):
     if not request.user.is_authenticated:

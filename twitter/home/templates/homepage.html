@@ -10,7 +10,32 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .tweet{
+            border: 1px solid black;
+             margin-left: 25%; 
+             width:50%;
+             padding: 5px;
+             margin-bottom:5px;
+        } 
 
+        textarea {
+            border: none;
+            background-color: transparent;
+            resize: none;
+            outline: none;
+            width:100%;
+        }
+
+        button:hover {
+            background-color:rgba(0, 0, 0, 0.1);
+
+        }
+        .like:hover {
+            width:30px;
+        }
+
+    </style>
     <title>Bootleg Twitter</title>
   </head>
   <body>
@@ -32,27 +57,34 @@
 </p>
 
 
-    
-    <form method="POST" action="/home/">
+    <br>
+    <br>
+    <form method="POST" action="/home/" style = "width:50%; margin-left:25%">
         {% csrf_token %}
-        <input name="body" placeholder="What's on your mind?"/>
-        <input type="submit" value="Post Tweet"/>
+        <textarea name="body" input type = "text" placeholder="What's on your mind?"></textarea>
+        
+        <input type="submit" value="Post Tweet" class="btn btn-primary" style = "border-radius: 8px; background-color: #5da5db"/>
 
     </form>
-
+    <br>
 
 
     {% for tweet in tweets %}
-        <div style = "border: 2px solid black; margin: 6px; width:50%">
-            <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</p>
+        <div class = "tweet">
+            <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="10%" style="margin-left:1%;">
+
+            <strong>{{tweet.author}}</strong> posted at: {{tweet.date}} likes: {{tweet.total_likes}}
             <p>{{tweet.body}}</p>
             {% if username == tweet.author%}
                 <a href="delete?id={{tweet.id}}">Delete</a>
             {%endif%} 
 
+            
             <form action = "{% url 'like_post' tweet.pk %}" method="POST">
                 {% csrf_token %}
-                <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
+                <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "like" style = "border: none; background-color: transparent; outline: none"> <img src="{% static '/like.png' %}" width="25px"/> </button>
+
+            
             </form>
 
 

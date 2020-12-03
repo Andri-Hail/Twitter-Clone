@@ -14,3 +14,8 @@ class Tweet(models.Model):
 
     def total_likes(self):
         return self.likes.count()
+
+class Profile(models.Model):
+    user = models.OneToOneField(User,  null=True, on_delete=models.CASCADE)
+    date_joined = models.DateTimeField(auto_now=True)
+    profile_pic = models.ImageField(null=True, blank=True, upload_to="images/")

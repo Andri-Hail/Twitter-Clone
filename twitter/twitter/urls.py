@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from home.views import home, delete_view, like_view, profile
+from home.views import home, delete_view, like_view, profile, editprofile
 from loginpage.views import accounts, login_view, signup_view, logout_view
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', home, name='home'),
@@ -30,6 +31,12 @@ urlpatterns = [
     path('profilepage/delete', delete_view, name='delete_view'),
 
     path('like/<int:pk>', like_view, name='like_post'),
-    path('profilepage/', profile, name='profile')
+    path('profilepage/', profile, name='profile'),
+    path('editprofile/', editprofile, name='editprofile')
+
     # path('', login, name='login'),
 ]
+
+if settings.DEBUG:
+        urlpatterns += static(settings.MEDIA_URL,
+                              document_root=settings.MEDIA_ROOT)
