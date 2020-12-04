@@ -46,9 +46,9 @@
             <div class="row no-gutters">
                 <div class="col-sm-5">
                     {% if username.profile.profile_pic %}
-                        <img class="card-img" src = "{{username.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="max-width: 120px;">
+                        <img class="card-img" src = "{{username.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="max-width: 120px; margin: 20px; text-align: center;">
                     {% else %}
-                        <img class="card-img" src="{% static '/profilepic.png' %}" alt="profile pic" style="max-width: 140px;">
+                        <img class="card-img" src="{% static '/profilepic.jpg' %}" alt="profile pic" style="max-width: 140px; margin: 20px; text-align: center;">
                     {% endif %}
                 </div>
                 <div class="col-sm-7">
@@ -69,7 +69,7 @@
 
     <h3>My tweets:</h3>
     {% for tweet in my_tweets %}
-    <div style = "border: 2px solid black; margin: 6px; width:50%">
+    <div style = "border: 2px solid black; margin: auto; width:50%">
         <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</0>
         <p>{{tweet.body}}</p>
         {% if username == tweet.author%}
