@@ -29,10 +29,12 @@ urlpatterns = [
     path('signup/', signup_view, name='signup_view'),
     path('home/delete', delete_view, name='delete_view'),
     path('home/hashtag', hashtag_view, name='hashtag_view'),
+    # path('home/hashtag', home, name='home'),
+
     path('profilepage/delete', delete_view, name='delete_view'),
     path('like/<int:pk>', like_view, name='like_post'),
     path('profilepage/', profile, name='profile'),
-    path('editprofile/', editprofile, name='editprofile')
+    path('<int:pk>/editprofile/', editprofile.as_view(), name='editprofile')
 
     # path('', login, name='login'),
 ]

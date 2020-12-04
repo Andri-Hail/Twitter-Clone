@@ -21,6 +21,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   
 
+    {% if user.is_authenticated %}
+
+    <div class = "form-group">
+        <form method = "POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-secondary">Update</button>
+        </div>
+        
+    {% endif %}
+        
+        
+
+
+    <br>
+    <br>
+
+    
  
 
 </body>

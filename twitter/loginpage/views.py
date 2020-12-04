@@ -31,12 +31,12 @@ def logout_view(request):
 
 
 def signup_view(request):
-	print(request.POST['username'], request.POST['password'], request.POST['email'])
-	user = User.objects.create_user(
-		username=request.POST['username'], 
-		password=request.POST['password'],
-		email = request.POST['email'])
-	login(request, user)
-	return redirect('/home/')
+    user = User.objects.create_user(
+	    username=request.POST['username'], 
+	    password=request.POST['password'],
+	    email = request.POST['email'])
+    profile = Profile.objects.create(user=user)
+    login(request, user)
+    return redirect('/home/')
 
 
