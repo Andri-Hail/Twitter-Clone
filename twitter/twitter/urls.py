@@ -15,10 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from home.views import home, delete_view, like_view, profile, editprofile, hashtag_view
+from home.views import home, delete_view, like_view, profile, editprofile, hashtag_view, handler404
 from loginpage.views import accounts, login_view, signup_view, logout_view
 from django.conf import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', home, name='home'),
@@ -29,16 +32,13 @@ urlpatterns = [
     path('signup/', signup_view, name='signup_view'),
     path('home/delete', delete_view, name='delete_view'),
     path('home/hashtag', hashtag_view, name='hashtag_view'),
-    # path('home/hashtag', home, name='home'),
-
     path('profilepage/delete', delete_view, name='delete_view'),
     path('like/<int:pk>', like_view, name='like_post'),
     path('profilepage/', profile, name='profile'),
-    path('<int:pk>/editprofile/', editprofile.as_view(), name='editprofile')
+    path('<int:pk>/editprofile/', editprofile.as_view(), name='editprofile'),
+    url(r'^$', handler404),
 
-    # path('', login, name='login'),
-]
+] 
+handler404 = 'home.views.handler404'
 
-if settings.DEBUG:
-        urlpatterns += static(settings.MEDIA_URL,
-                              document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

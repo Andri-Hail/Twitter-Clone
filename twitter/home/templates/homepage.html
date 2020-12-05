@@ -25,6 +25,15 @@
              border-radius: 5px;
         } 
 
+        .reply{
+             /* border-left: 1px solid grey;  */
+             margin-left: 10%; 
+             width:35%;
+             padding: 5px;
+             /* margin-bottom:5px; */
+             /* border-radius: 5px; */
+        } 
+
         .hashtags{
              float:right;
              margin-right: 5%; 
@@ -79,7 +88,9 @@
         }
         
         .tweet-buttons:hover {
+            border: none; 
             background-color: transparent;
+            outline: none;
         }
 
     </style>
@@ -96,6 +107,10 @@
 
 
     {% load static %}
+
+
+{% if user.is_authenticated %}
+    
 
 <!-- Link to profile page with either default logo or user submitted -->
  <a href="/profilepage/">
@@ -180,14 +195,7 @@
     </form>
     <br>
 
-
-    
-
-
-
-
     {% for tweet in tweets %}
-
         <div class = "tweet">
             <!-- Puts in default profile pic or user uploaded one: -->
             {% if tweet.author.profile.profile_pic %}
@@ -199,55 +207,34 @@
             <strong style="margin-left: 2%">@{{tweet.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{tweet.date}} </style>
 
             <p style="margin-top:20px; margin-left:10px">{{tweet.body}}</p>
-
-<<<<<<< HEAD
-            <!-- Delete button only visible if user posted tweet: -->
-            {% if username == tweet.author%}
-                <a href="delete?id={{tweet.id}}"><img src="{% static '/delete.jpg' %}" width="25px" style="float:right; margin-bottom: 0px;" alt="delete"></a>
-            {%endif%} 
-            
-            <b style="margin-left:30px; margin:0">{{tweet.total_likes}}</b>
-            
-
-            {% for reply in tweet.replies.all %}
-                {{reply.body}}
-            {% endfor %}
-
-
-            <!-- Reply: -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal{{tweet.id}}">
-                Reply
-              </button>
-            <!-- Modal -->
-            <div class="modal fade" id="modal{{tweet.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="POST" action="/home/" style = "width:80%; margin-left:10%">
-                            {% csrf_token %}
-                            <textarea name="body" style = "height:100px" input type = "text" placeholder="Reply here"></textarea>
-                            
-                            
-                            <button type="submit" value="{{tweet.id}}" name="reply" class="post_tweet">Post</button>
-
-                        </form>
-                    </div>
-    </div>
-    </div>
-</div>
-=======
+           
             <div class = "tweet_options" style="width:100%">
                 <!-- Reply: -->
-                <button type="button" data-toggle="modal" class = "tweet-buttons" style = "margin-right: 20%;"data-target="#exampleModalCenter">
+                <button type="button" data-toggle="modal" class = "tweet-buttons" style = "margin-right: 20%;"data-target="#modal{{tweet.id}}">
                     <img src="{% static '/reply.jpg' %}" width="25px"/>
                 </button>
 
+                 <!-- Modal -->
+                <div class="modal fade" id="modal{{tweet.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" action="/home/" style = "width:80%; margin-left:10%">
+                                    {% csrf_token %}
+                                    <textarea name="body" style = "height:100px" input type = "text" placeholder="Reply here"></textarea>                                    
+                                    <button type="submit" value="{{tweet.id}}" name="reply" class="post-tweet" style="background-color: #5da5db;">Post</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
                 <!-- Heart is either filled or not depending if user liked: -->
                 {% if tweet.liked  %}
                 <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
@@ -260,7 +247,6 @@
                     <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"><img src="{% static '/like.jpg' %}" width="25px"/> </button>
                 </form>
                 {%endif%}
->>>>>>> 380dce501666e30cf265c7a02a796903fdd31491
 
                 <!-- Number of likes: -->
                 <b style="display: inline; margin-right: 20%;">{{tweet.total_likes}}</b>
@@ -273,41 +259,58 @@
             </div>  
 
         </div>
+
+        {% for x in tweet.children.all %}
+        <div class = "reply" style = "width:60%">
+            <!-- Puts in default profile pic or user uploaded one: -->
+            {% if x.author.profile.profile_pic %}
+                <img src = "{{x.author.profile.profile_pic.url}}" alt = "profile pic" width="12%" class = "rounded-circle" style="margin-left:1%;">
+            {% else %}
+                <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "12%"  style="margin-left:1%;">
+            {% endif %}
+            <strong style="margin-left: 2%">@{{x.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{x.date}} </style>
+
+            <p style="margin-top:20px; margin-left:10px">{{x.body}}</p>
+
+            <div class = "tweet_options" style="width:100%">
+                
+                <!-- Heart is either filled or not depending if user liked: -->
+
+                {% if x in liked_tweets %}
+                <form action = "{% url 'like_post' x.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{x.id}}" class = "tweet-buttons"> <img src="{% static '/liked.jpg' %}" width="25px"/> </button>
+                </form>
+                {% else %}
+                <form action = "{% url 'like_post' x.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{x.id}}" class = "tweet-buttons"><img src="{% static '/like.jpg' %}" width="25px"/> </button>
+                </form>
+                {%endif%}
+
+                <!-- Number of likes: -->
+                <b style="display: inline; margin-right: 20%;">{{x.total_likes}}</b>
+
+                <!-- Delete button only visible if user posted tweet: -->
+                {% if username == x.author%}
+                    <a href="delete?id={{x.id}}"><img src="{% static '/delete.jpg' %}" width="25px" style="" alt="delete"></a>
+                {%endif%} 
+
+            </div>  
+        <hr style="margin-top: 10px; margin-right:40%">
+
+        </div>
+        
+        {% endfor %} 
+
     {% endfor %}
 
-    
-<<<<<<< HEAD
-   
-=======
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            </div>
-            <div class="modal-body">
-                <form method="POST" action="/home/" style = "width:80%; margin-left:10%">
-                    {% csrf_token %}
-                    <textarea name="body" style = "height:100px" input type = "text" placeholder="Reply here"></textarea>
-                    <input type="submit" value="Reply to Tweet" name="reply" class="post-tweet"/>
+<a href="/logout" style="margin-bottom: 10px;">Log out</a>
+{% else %}
+    <a href="/accounts/">Please log in or sign up first</a>
 
-                </form>
-            </div>
-            
-        </div>
-        </div>
-    </div>
->>>>>>> 380dce501666e30cf265c7a02a796903fdd31491
-
-    
-
-
-
-
+{% endif %}
+<br>
 
 </body>
 </html>

@@ -65,7 +65,10 @@
                     <div class="card-body">
                         <h2 class="card-title">{{username}} &#8226; {{tweet_count}} {{append}}</h2>
                         <p class="card-text">{{user.profile.bio}}</p>
-                        <a href="{% url 'editprofile' username.profile.id %}" class="btn btn-primary" style="background-color:#5da5db">Edit Profile</a>
+                        
+                        <a href="{% url 'editprofile' username.profile.id %}" class="btn btn-primary" style="width: 110px;margin-right:5px; background-color:#5da5db">Edit Profile</a>
+                        <a href="/logout" class="btn btn-primary" style=" width:110px; background-color:#5da5db">Log out</a>
+
                     </div>
                 </div>
             </div>
@@ -76,6 +79,7 @@
 
     <div style = "float: right; width: 45%;">
         <h3 >My Liked Tweets</h3>
+
         {% for tweet in liked_tweets %}
         <div class = "tweet">
 
@@ -97,17 +101,11 @@
                 </button>
 
                 <!-- Heart is either filled or not depending if user liked: -->
-                {% if tweet.liked  %}
                 <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
                     {% csrf_token %}
                     <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"> <img src="{% static '/liked.jpg' %}" width="25px"/> </button>
                 </form>
-                {% else %}
-                <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
-                    {% csrf_token %}
-                    <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"><img src="{% static '/like.jpg' %}" width="25px"/> </button>
-                </form>
-                {%endif%}
+               
 
                 <!-- Number of likes: -->
                 <b style="display: inline; margin-right: 20%;">{{tweet.total_likes}}</b>
@@ -149,7 +147,7 @@
                 </button>
 
                 <!-- Heart is either filled or not depending if user liked: -->
-                {% if tweet.liked  %}
+                {% if tweet in liked_tweets  %}
                 <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
                     {% csrf_token %}
                     <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"> <img src="{% static '/liked.jpg' %}" width="25px"/> </button>
@@ -175,7 +173,6 @@
         {% endfor %}
     </div>
 
-    <!-- <hr style = "width: 70%; padding-top: 3%"> -->
 
 </body>
 </html>

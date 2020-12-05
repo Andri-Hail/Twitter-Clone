@@ -8,33 +8,32 @@ from django.http import HttpResponseRedirect
 from django.core.exceptions import ObjectDoesNotExist
 import re
 from django.views import generic
-
 from django.views.generic.edit import UpdateView
+  
 
-# Create your views here.
+# from django.shortcuts import render_to_response
+from django.template import RequestContext
 
-# def homepage(request):
-#     return render(request, "homepage.html", {})
-
-    
-
+def handler404(request, *args, **argv):
+    return render(request, 'error_404.html')
+ 
 def like_view(request, pk):
     tweet = get_object_or_404(Tweet, id=request.POST.get('post_id'))
 
     if tweet.likes.filter(id=request.user.id).exists():
         tweet.likes.remove(request.user)
+        tweet.liked = False
     else:
-        tweet.likes.add(request.user)  
+        tweet.likes.add(request.user)
+        tweet.liked = True
+  
     return redirect(request.META['HTTP_REFERER'])
-
 
 class editprofile(generic.UpdateView):
     model = Profile
     template_name = 'editprofile.html'
     fields = ['bio', 'profile_pic']
     success_url = '/profilepage'
-
-
 
 
 def profile(request):
@@ -65,28 +64,36 @@ def profile(request):
 def home(request):
     if not request.user.is_authenticated:
         return redirect('/accounts/')
-    #Insert data into DB if post:
-    if 'submit_tweet' in request.POST:
-        if request.method == 'POST' and request.POST['body'] !="":
+
+
+    # Insert data into DB if post:
+    if request.method == 'POST' and request.POST['body'] !="":
+        if 'submit_tweet' in request.POST:
             text = request.POST['body']
             #create tweet:
             tweet = Tweet.objects.create (
                 body = text,
-                author = request.user
+                author = request.user,
             )
-    elif request.method == 'POST' and request.POST['body'] !="":
-        parent = Tweet.objects.get(id=request.POST.get('reply', ""))
-        reply = Reply.objects.create (
-            og_tweet = parent,
-            body = request.POST['body'],
-            name = request.user
+        else:
+            parent = Tweet.objects.get(id=request.POST.get('reply', ""))
+            text = request.POST['body']
+            #create tweet:
+            tweet = Tweet.objects.create (
+                body = text,
+                author = request.user,
+                parent = parent
             )
+            parent.children.add(tweet)
 
     username = request.user
     tweets = Tweet.objects.all()
+    tweet_feed = set()
     liked_tweets = set()
     hashtaglist = set()
     for tweet in tweets:
+        if tweet.parent is None:
+            tweet_feed.add(tweet)
         if tweet.likes.filter(id=request.user.id).exists():
             liked_tweets.add(tweet)
             tweet.liked = True
@@ -102,7 +109,7 @@ def home(request):
             
     hashtags = Hashtag.objects.all()
 
-    return render(request, 'homepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'username' : username, 'hashtaglist' : hashtaglist, 'hashtags' : hashtags})
+    return render(request, 'homepage.html', {'tweets' : tweet_feed, 'liked_tweets' : liked_tweets, 'username' : username, 'hashtaglist' : hashtaglist, 'hashtags' : hashtags})
 
 
 def hashtag_view(request):
