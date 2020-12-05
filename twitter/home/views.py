@@ -74,33 +74,14 @@ def home(request):
                 body = text,
                 author = request.user
             )
-    # elif request.method == 'POST' and request.POST['body'] !="":
-    #     tweets = Tweet.objects.all()
-    #     for tweet in tweets:
+    elif request.method == 'POST' and request.POST['body'] !="":
+        parent = Tweet.objects.get(id=request.POST.get('reply', ""))
+        reply = Reply.objects.create (
+            og_tweet = parent,
+            body = request.POST['body'],
+            name = request.user
+            )
 
-
-
-
-    #     reply = Reply.objects.create (
-    #         og_tweet = 
-    #         body = request.POST['body'],
-    #         name = request.user
-    #         )
-
-
-
-
-    
-    
-        #Parse out hashtags and add them to Model, related to Tweet
-    #     hashtags = re.findall(r"#(\w+)", text)
-    #     for hashtag in hashtags:
-    #         try:
-    #             hashtag_obj = Hashtag.objects.get(word=hashtag)
-    #         except Hashtag.DoesNotExist as exc:
-    #             hashtag_obj = Hashtag.objects.create(word=hashtag)
-    #         hashtag_obj.tweets.add(tweet)
-    # hashtags = Hashtag.objects.all()
     username = request.user
     tweets = Tweet.objects.all()
     liked_tweets = set()
