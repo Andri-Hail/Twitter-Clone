@@ -14,6 +14,16 @@
             width: 0px;
             background: transparent; /* make scrollbar transparent */
         }
+
+        .tweet-buttons {
+            border: none; 
+            background-color: transparent;
+            outline: none;
+        }
+        
+        .tweet-buttons:hover {
+            background-color: transparent;
+        }
     </style>
   </head>
 
@@ -41,70 +51,131 @@
   
 
     {% load static %}
-    <div class="container bcontent">
-        <div class="card" >
+    <div class="container bcontent"  style="width: 70%;">
+        <div class="card">
             <div class="row no-gutters">
                 <div class="col-sm-5">
                     {% if username.profile.profile_pic %}
-                        <img class="card-img" src = "{{username.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="max-width: 120px;">
+                        <img class="card-img" src = "{{username.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="max-width: 120px; margin: 20px; text-align: center;">
                     {% else %}
-                        <img class="card-img" src="{% static '/profilepic.png' %}" alt="profile pic" style="max-width: 140px;">
+                        <img class="card-img" src="{% static '/profilepic.jpg' %}" alt="profile pic" style="max-width: 140px; margin: 20px; text-align: center;">
                     {% endif %}
                 </div>
                 <div class="col-sm-7">
                     <div class="card-body">
-                        <h2 class="card-title">{{username}}: {{tweet_count}} {{append}}</h2>
+                        <h2 class="card-title">{{username}} &#8226; {{tweet_count}} {{append}}</h2>
                         <p class="card-text">{{user.profile.bio}}</p>
                         <a href="{% url 'editprofile' username.profile.id %}" class="btn btn-primary" style="background-color:#5da5db">Edit Profile</a>
                     </div>
                 </div>
             </div>
         </div>
-        <hr />
+        <hr style ="padding-top: 3%">
 
+    </div>
+
+    <div style = "float: right; width: 45%;">
+        <h3 >My Liked Tweets</h3>
+        {% for tweet in liked_tweets %}
+        <div class = "tweet">
+
+            <!-- Puts in default profile pic or user uploaded one: -->
+            {% if tweet.author.profile.profile_pic %}
+            <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="12%" class = "rounded-circle" style="margin-left:1%;">
+            {% else %}
+            <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "12%"  style="margin-left:1%;">
+            {% endif %}
+
+            <strong style="margin-left: 2%">@{{tweet.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{tweet.date}} </style>
+
+            <p style="margin-top:20px; margin-left:10px">{{tweet.body}}</p>
+
+            <div class = "tweet_options" style="width:100%">
+                <!-- Reply: -->
+                <button type="button" data-toggle="modal" class = "tweet-buttons" style = "margin-right: 20%;"data-target="#exampleModalCenter">
+                    <img src="{% static '/reply.jpg' %}" width="25px"/>
+                </button>
+
+                <!-- Heart is either filled or not depending if user liked: -->
+                {% if tweet.liked  %}
+                <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"> <img src="{% static '/liked.jpg' %}" width="25px"/> </button>
+                </form>
+                {% else %}
+                <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"><img src="{% static '/like.jpg' %}" width="25px"/> </button>
+                </form>
+                {%endif%}
+
+                <!-- Number of likes: -->
+                <b style="display: inline; margin-right: 20%;">{{tweet.total_likes}}</b>
+
+                <!-- Delete button only visible if user posted tweet: -->
+                {% if username == tweet.author%}
+                    <a href="delete?id={{tweet.id}}"><img src="{% static '/delete.jpg' %}" width="25px" style="" alt="delete"></a>
+                {%endif%} 
+                <hr style="margin-top: 10px;">
+            </div>
+
+        </div>
+        {% endfor %}
     </div>
 
 
 
+    <div style = "margin: 0px; margin-left: 5%; width: 45%">
+        <h3>My Tweets</h3>
+        {% for tweet in my_tweets %}
+        
+        <div class = "tweet">
 
-    <h3>My tweets:</h3>
-    {% for tweet in my_tweets %}
-    <div style = "border: 2px solid black; margin: 6px; width:50%">
-        <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</0>
-        <p>{{tweet.body}}</p>
-        {% if username == tweet.author%}
-            <a href="delete?id={{tweet.id}}">Delete</a>
-        {%endif%} 
+            <!-- Puts in default profile pic or user uploaded one: -->
+            {% if tweet.author.profile.profile_pic %}
+            <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="12%" class = "rounded-circle" style="margin-left:1%;">
+            {% else %}
+            <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "12%"  style="margin-left:1%;">
+            {% endif %}
 
-        <form action = "{% url 'like_post' tweet.pk %}" method="POST">
-            {% csrf_token %}
-            <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
-        </form>
+            <strong style="margin-left: 2%">@{{tweet.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{tweet.date}} </style>
 
+            <p style="margin-top:20px; margin-left:10px">{{tweet.body}}</p>
 
+            <div class = "tweet_options" style="width:100%">
+                <!-- Reply: -->
+                <button type="button" data-toggle="modal" class = "tweet-buttons" style = "margin-right: 20%;"data-target="#exampleModalCenter">
+                    <img src="{% static '/reply.jpg' %}" width="25px"/>
+                </button>
+
+                <!-- Heart is either filled or not depending if user liked: -->
+                {% if tweet.liked  %}
+                <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"> <img src="{% static '/liked.jpg' %}" width="25px"/> </button>
+                </form>
+                {% else %}
+                <form action = "{% url 'like_post' tweet.pk %}" method="POST" style="width: 40px; display: inline-block">
+                    {% csrf_token %}
+                    <button type ="submit" name = "post_id" value="{{tweet.id}}" class = "tweet-buttons"><img src="{% static '/like.jpg' %}" width="25px"/> </button>
+                </form>
+                {%endif%}
+
+                <!-- Number of likes: -->
+                <b style="display: inline; margin-right: 20%;">{{tweet.total_likes}}</b>
+
+                <!-- Delete button only visible if user posted tweet: -->
+                {% if username == tweet.author%}
+                    <a href="delete?id={{tweet.id}}"><img src="{% static '/delete.jpg' %}" width="25px" style="" alt="delete"></a>
+                {%endif%} 
+                <hr style="margin-top: 10px;">
+            </div>
+
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 
-
-    <h3>My liked tweets:</h3>
-    {% for tweet in liked_tweets %}
-    <div style = "border: 2px solid black; margin: 6px; width:50%">
-        <p>{{tweet.author}} posted at: {{tweet.date}} likes: {{tweet.total_likes}}</0>
-        <p>{{tweet.body}}</p>
-        {% if username == tweet.author%}
-            <a href="delete?id={{tweet.id}}">Delete</a>
-        {%endif%} 
-
-        <form action = "{% url 'like_post' tweet.pk %}" method="POST">
-            {% csrf_token %}
-            <button type ="submit" name = "post_id" value="{{tweet.id}}"> Like </button>
-        </form>
-
-
-
-    </div>
-{% endfor %}
-
+    <!-- <hr style = "width: 70%; padding-top: 3%"> -->
 
 </body>
 </html>
