@@ -29,7 +29,6 @@
              float:right;
              margin-right: 5%; 
              width:40%;
-             padding: 5px;
              margin-bottom:5px;
              border-radius: 5px;
         } 
@@ -42,6 +41,7 @@
             resize: none;
             outline: none;
             width:100%;
+            padding: 5px;
         }
         .post-tweet {
             border-radius: 8px; 
@@ -53,6 +53,7 @@
             padding:3px;
             width:120px;
             outline: none;
+            float: right;
         }
 
         .post-tweet:hover{
@@ -96,8 +97,6 @@
 
     {% load static %}
 
-
-
 <!-- Link to profile page with either default logo or user submitted -->
  <a href="/profilepage/">
     {% if user.profile.profile_pic %}
@@ -110,7 +109,7 @@
 
  <img src="{% static '/logoNoWords.png' %}" alt="logo" width = "5%"   style="float:left; margin-left:15px; margin-top:5px">
 
- <img src="{% static '/logowords.png' %}" alt="logo" width = "30%"   style="margin-left:30%; margin-top:5px">
+ <img src="{% static '/logowords.png' %}" alt="logo" width = "30%"   style="margin-left:28%; margin-right:28%; margin-top:5px">
 
 
     <br>
@@ -124,24 +123,24 @@
         <h1 class="text-center">Top Hashtags</h1>
         <hr>
         {% for hashtag in hashtaglist %}
-            <div style = " margin: 6px; width:50%">
-                <a href="hashtag?tag={{hashtag}}">#{{hashtag}}</a>
+            <div style = "margin: 6px; width:50%">
+                <a href="hashtag?tag={{hashtag}}" style="color:  #5da5db;">#{{hashtag}}</a>
             </div>
 
         {% endfor %}
 
-    <h3 class="text-center">Tweets including <mark style="background: none; color:#5f8ced">#{{tag}}</mark></h3>
+    <h3 class="text-center" style="margin-top: 6%;">Tweets including <mark style="background: none; color:#5da5db;">#{{tag}}</mark></h3>
 
     {% for tweet in taggedtweets %}
     <div class = "tweet" style="width:100%">
         <!-- Puts in default profile pic or user uploaded one: -->
         {% if tweet.author.profile.profile_pic %}
-            <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="margin-left:1%;">
+            <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="12%" class = "rounded-circle" style="margin-left:1%;">
         {% else %}
-            <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "10%"  style="margin-left:1%;">
+            <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "12%"  style="margin-left:1%;">
         {% endif %}
 
-        <strong>{{tweet.author}}</strong> posted at: {{tweet.date}} 
+        <strong style="margin-left: 2%">@{{tweet.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{tweet.date}} </style>
 
         <p style="margin-top:20px; margin-left:10px">{{tweet.body}}</p>
 
@@ -160,7 +159,7 @@
             {%endif%}
 
             <!-- Number of likes: -->
-            <b style="margin-left:30px; margin:0">{{tweet.total_likes}} likes</b>
+            <b style="margin-left:30px; margin:0">{{tweet.total_likes}}</b>
 
             <!-- Delete button only visible if user posted tweet: -->
             {% if username == tweet.author%}
@@ -174,7 +173,7 @@
 
 
     <!-- Submit tweet -->
-    <form method="POST" action="/home/" style = "width:40%; margin-left:5%">
+    <form method="POST" action="/home/" style = "width:40%; margin-left:5%; margin-bottom: 8%;">
         {% csrf_token %}
         <textarea name="body" style = "height:100px" input type = "text" placeholder="What's on your mind?" ></textarea>
         <input type="submit" value="Post Tweet" name ="submit_tweet" class="post-tweet"/>
@@ -192,12 +191,12 @@
         <div class = "tweet">
             <!-- Puts in default profile pic or user uploaded one: -->
             {% if tweet.author.profile.profile_pic %}
-                <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="10%" class = "rounded-circle" style="margin-left:1%;">
+                <img src = "{{tweet.author.profile.profile_pic.url}}" alt = "profile pic" width="12%" class = "rounded-circle" style="margin-left:1%;">
             {% else %}
-                <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "10%"  style="margin-left:1%;">
+                <img src="{% static '/profilepic.jpg' %}" alt="logo" width = "12%"  style="margin-left:1%;">
             {% endif %}
 
-            <strong>{{tweet.author}}</strong> posted at: {{tweet.date}} 
+            <strong style="margin-left: 2%">@{{tweet.author}}</strong> &#8226; <p style = "display: inline; color: #686b6b"> {{tweet.date}} </style>
 
             <p style="margin-top:20px; margin-left:10px">{{tweet.body}}</p>
 
