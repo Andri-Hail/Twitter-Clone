@@ -62,7 +62,7 @@ def profile(request):
 
     return render(request, 'profilepage.html', {'tweets' : tweets, 'liked_tweets' : liked_tweets, 'my_tweets' : my_tweets, 'username' : username, 'tweet_count' : tweet_count, 'append' : append })
 
-def home_view();
+def home_view():
     pass
 
 def home(request):
