@@ -35,6 +35,8 @@ class editprofile(generic.UpdateView):
     fields = ['bio', 'profile_pic']
     success_url = '/profilepage'
 
+def profile_view():
+    pass
 
 def profile(request):
     if not request.user.is_authenticated:
