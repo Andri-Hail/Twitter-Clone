@@ -117,6 +117,9 @@ def hash_view():
 def tag_view():
     pass
 
+def hashtag_viewing():
+    pass
+
 def hashtag_view(request):
         
     tag = request.GET['tag']
