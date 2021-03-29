@@ -111,6 +111,8 @@ def home(request):
 
     return render(request, 'homepage.html', {'tweets' : tweet_feed, 'liked_tweets' : liked_tweets, 'username' : username, 'hashtaglist' : hashtaglist, 'hashtags' : hashtags})
 
+def hash_view():
+    pass
 
 def hashtag_view(request):
         
